@@ -14,19 +14,16 @@ td {
 }
 </style>
   <body>
-    <h1>Impact of Added Income on Portfolio Value</h1>
-    <p>Enter the annual contribution and real yield (%).</p>
+    <h1 id="title">Impact of Added Income on Portfolio Value</h1>
+    <label for="annualContribution">Annual Contribution:</label>
+    <input type="text" id="annualContribution" value="60000" oninput="calculate()" /> (USD)
+    <br /><br />
 
-    <label for="annualContribution">Annual Contribution (USD):</label><br />
-    <input type="text" id="annualContribution" value="60000" /><br /><br />
-
-    <label for="realYield">Real Yield (%):</label><br />
-    <input type="text" id="realYield" value="50" /><br /><br />
-
-    <button onclick="calculate()">Calculate</button>
+    <label for="realYield">Real Yield:</label>
+    <input type="text" id="realYield" value="50" oninput="calculate()" /> (%)
+    <br />
 
     <h2>Results:</h2>
-    <h3 id="title"></h3>
     <table border="1">
       <thead>
         <tr>
