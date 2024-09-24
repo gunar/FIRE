@@ -1,0 +1,108 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Impact of Added Income on Portfolio Value</title>
+  </head>
+<style>
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+  padding: 5px;
+}
+td {
+  font-family: "Courier New", Courier, monospace;
+}
+</style>
+  <body>
+    <h1>Impact of Added Income on Portfolio Value</h1>
+    <p>Enter the annual contribution, real yield (%), and number of years.</p>
+
+    <label for="annualContribution">Annual Contribution (USD):</label><br />
+    <input type="text" id="annualContribution" value="60000" /><br /><br />
+
+    <label for="realYield">Real Yield (%):</label><br />
+    <input type="text" id="realYield" value="50" /><br /><br />
+
+    <button onclick="calculate()">Calculate</button>
+
+    <h2>Results:</h2>
+    <h3 id="title"></h3>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>Initial Capital</th>
+          <th>One Year</th>
+          <th>Two Years</th>
+          <th>Five Years</th>
+          <th>Ten Years</th>
+        </tr>
+      </thead>
+      <tbody id="resultsTable"></tbody>
+    </table>
+
+    <script>
+      function calculate() {
+        var initialCapitals = [
+          100_000, 200_000, 500_000, 1000_000, 2_000_000, 3_000_000, 4_000_000,
+          5_000_000, 10_000000,
+        ];
+
+        var annualContribution = parseFloat(
+          document.getElementById("annualContribution").value,
+        );
+        var realYield =
+          parseFloat(document.getElementById("realYield").value) / 100;
+
+        var title = document.getElementById("title");
+        title.innerHTML =
+          "Impact of Additional " +
+          annualContribution.toLocaleString("en-US", {
+            style: "currency",
+            currency: "USD",
+            maximumFractionDigits: 0,
+          }) +
+          " Yearly Income on Portfolio Value (" +
+          realYield * 100 +
+          "% Real Yield)";
+        document.title = title.innerHTML;
+
+        var resultsTable = document.getElementById("resultsTable");
+        resultsTable.innerHTML = ""; // Clear previous results
+
+        var yearsList = [1, 2, 5, 10]; // Years to calculate
+
+        for (var i = 0; i < initialCapitals.length; i++) {
+          var initialCapital = initialCapitals[i];
+
+          // Create a new row for each initial capital
+          var row = resultsTable.insertRow();
+          var cell1 = row.insertCell(0);
+          cell1.innerHTML = initialCapital.toLocaleString("en-US", {
+            style: "currency",
+            currency: "USD",
+            maximumFractionDigits: 0,
+          });
+
+          // Calculate impact for each year
+          for (var j = 0; j < yearsList.length; j++) {
+            var years = yearsList[j];
+            var FV_without_contributions =
+              initialCapital * Math.pow(1 + realYield, years);
+            var FV_contributions =
+              (annualContribution * (Math.pow(1 + realYield, years) - 1)) /
+              realYield;
+            var FV_with_contributions =
+              FV_without_contributions + FV_contributions;
+
+            var impact = (FV_contributions / FV_with_contributions) * 100;
+
+            // Insert cell for this year's impact
+            var cell = row.insertCell(j + 1); // +1 because the first cell is initial capital
+            cell.innerHTML = '+' + impact.toFixed(2) + "%";
+          }
+        }
+      }
+      calculate();
+    </script>
+  </body>
+</html>
