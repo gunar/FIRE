@@ -19,6 +19,10 @@ td {
     <input type="text" id="annualContribution" value="60000" oninput="calculate()" /> (USD)
     <br /><br />
 
+    <label for="annualExpenses">Annual Expenses:</label>
+    <input type="text" id="annualExpenses" value="30000" oninput="calculate()" /> (USD)
+    <br /><br />
+
     <label for="realYield">Real Yield:</label>
     <input type="text" id="realYield" value="50" oninput="calculate()" /> (%)
     <br />
@@ -47,13 +51,17 @@ td {
         var annualContribution = parseFloat(
           document.getElementById("annualContribution").value,
         );
+        var annualExpenses = parseFloat(
+          document.getElementById("annualExpenses").value,
+        );
+        var netAnnualContribution = annualContribution - annualExpenses;
         var realYield =
           parseFloat(document.getElementById("realYield").value) / 100;
 
         var title = document.getElementById("title");
         title.innerHTML =
           "Impact of Additional " +
-          annualContribution.toLocaleString("en-US", {
+          netAnnualContribution.toLocaleString("en-US", {
             style: "currency",
             currency: "USD",
             maximumFractionDigits: 0,
@@ -86,7 +94,7 @@ td {
             var FV_without_contributions =
               initialCapital * Math.pow(1 + realYield, years);
             var FV_contributions =
-              (annualContribution * (Math.pow(1 + realYield, years) - 1)) /
+              (netAnnualContribution * (Math.pow(1 + realYield, years) - 1)) /
               realYield;
             var FV_with_contributions =
               FV_without_contributions + FV_contributions;
