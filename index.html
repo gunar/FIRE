@@ -41,6 +41,20 @@ td {
       <tbody id="resultsTable"></tbody>
     </table>
 
+    <h2>Living Off Savings:</h2>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>Initial Capital</th>
+          <th>One Year</th>
+          <th>Two Years</th>
+          <th>Five Years</th>
+          <th>Ten Years</th>
+        </tr>
+      </thead>
+      <tbody id="livingOffTable"></tbody>
+    </table>
+
     <script>
       function calculate() {
         var initialCapitals = [
@@ -74,6 +88,9 @@ td {
         var resultsTable = document.getElementById("resultsTable");
         resultsTable.innerHTML = ""; // Clear previous results
 
+        var livingOffTable = document.getElementById("livingOffTable");
+        livingOffTable.innerHTML = ""; // Clear previous results
+
         var yearsList = [1, 2, 5, 10]; // Years to calculate
 
         for (var i = 0; i < initialCapitals.length; i++) {
@@ -104,6 +121,33 @@ td {
             // Insert cell for this year's impact
             var cell = row.insertCell(j + 1); // +1 because the first cell is initial capital
             cell.innerHTML = '+' + impact.toFixed(2) + "%";
+          }
+
+          // Create a new row for living off savings
+          var livingRow = livingOffTable.insertRow();
+          var livingCell1 = livingRow.insertCell(0);
+          livingCell1.innerHTML = initialCapital.toLocaleString("en-US", {
+            style: "currency",
+            currency: "USD",
+            maximumFractionDigits: 0,
+          });
+
+          // Calculate impact for living off savings
+          for (var j = 0; j < yearsList.length; j++) {
+            var years = yearsList[j];
+            var FV_without_contributions =
+              initialCapital * Math.pow(1 + realYield, years);
+            var FV_expenses =
+              (annualExpenses * (Math.pow(1 + realYield, years) - 1)) /
+              realYield;
+            var FV_with_expenses =
+              FV_without_contributions - FV_expenses;
+
+            var impact = ((FV_with_expenses - initialCapital) / initialCapital) * 100;
+
+            // Insert cell for this year's impact
+            var livingCell = livingRow.insertCell(j + 1); // +1 because the first cell is initial capital
+            livingCell.innerHTML = impact.toFixed(2) + "%";
           }
         }
       }
